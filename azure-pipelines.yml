@@ -26,6 +26,27 @@ steps:
     version: 'v1.26.0'
     dir: '$(System.DefaultWorkingDirectory)Environment/Dev'
 
+- task: TerraformTask@5
+  displayName: Terraform Plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)Environment/Dev'
+    environmentServiceNameAzureRM: 'Maddypipeline'
+
+# -----------------------------------
+# 5️⃣ Terraform Apply (AUTO APPROVE ✅)
+# -----------------------------------
+- task: TerraformTask@5
+  displayName: Terraform Apply
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)Environment/Dev'
+    environmentServiceNameAzureRM: 'Maddypipeline'
+    commandOptions: '-auto-approve'
+
+
 
 
 
