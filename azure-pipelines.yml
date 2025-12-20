@@ -1,63 +1,99 @@
 trigger: none
 
 pool:
-  name: Ammupool   # self-hosted agent
-
-variables:
-  tfVersion: '1.6.6'
-  tfWorkingDir: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+  name: Ammupool   # self-hosted agenst
 
 steps:
-# -----------------------------------
-# 1️⃣ Install Terraform
-# -----------------------------------
 - task: TerraformInstaller@1
-  displayName: Install Terraform
   inputs:
-    terraformVersion: $(tfVersion)
+    terraformVersion: 'latest'
 
-# -----------------------------------
-# 2️⃣ Terraform Init (Azure Backend)
-# -----------------------------------
 - task: TerraformTask@5
-  displayName: Terraform Init
   inputs:
     provider: 'azurerm'
     command: 'init'
-    workingDirectory: $(tfWorkingDir)
     backendServiceArm: 'Maddypipeline'
     backendAzureRmStorageAccountName: 'shipoostg'
     backendAzureRmContainerName: 'shipoocont'
-    backendAzureRmKey: 'dev.tfstate'
+    backendAzureRmKey: 'maddy.tfstate'
 
-# -----------------------------------
-# 3️⃣ Tfsec Scan
-# -----------------------------------
-- task: tfsec@1
-  displayName: Tfsec Security Scan
-  inputs:
-    version: 'v1.26.0'
-    dir: $(tfWorkingDir)
 
-# -----------------------------------
-# 4️⃣ Terraform Plan
-# -----------------------------------
-- task: TerraformTask@5
-  displayName: Terraform Plan
-  inputs:
-    provider: 'azurerm'
-    command: 'plan'
-    workingDirectory: $(tfWorkingDir)
-    environmentServiceNameAzureRM: 'Maddypipeline'
 
-# -----------------------------------
-# 5️⃣ Terraform Apply (AUTO APPROVE ✅)
-# -----------------------------------
-- task: TerraformTask@5
-  displayName: Terraform Apply
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    workingDirectory: $(tfWorkingDir)
-    environmentServiceNameAzureRM: 'Maddypipeline'
-    commandOptions: '-auto-approve'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# steps:
+# # -----------------------------------
+# # 1️⃣ Install Terraform
+# # -----------------------------------
+# - task: TerraformInstaller@1
+#   displayName: Install Terraform
+#   inputs:
+#     terraformVersion: $(tfVersion)
+
+# # -----------------------------------
+# # 2️⃣ Terraform Init (Azure Backend)
+# # -----------------------------------
+# - task: TerraformTask@5
+#   displayName: Terraform Init
+#   inputs:
+#     provider: 'azurerm'
+#     command: 'init'
+#     workingDirectory: $(tfWorkingDir)
+#     backendServiceArm: 'Maddypipeline'
+#     backendAzureRmStorageAccountName: 'shipoostg'
+#     backendAzureRmContainerName: 'shipoocont'
+#     backendAzureRmKey: 'dev.tfstate'
+
+# # -----------------------------------
+# # 3️⃣ Tfsec Scan
+# # -----------------------------------
+# - task: tfsec@1
+#   displayName: Tfsec Security Scan
+#   inputs:
+#     version: 'v1.26.0'
+#     dir: $(tfWorkingDir)
+
+# # -----------------------------------
+# # 4️⃣ Terraform Plan
+# # -----------------------------------
+# - task: TerraformTask@5
+#   displayName: Terraform Plan
+#   inputs:
+#     provider: 'azurerm'
+#     command: 'plan'
+#     workingDirectory: $(tfWorkingDir)
+#     environmentServiceNameAzureRM: 'Maddypipeline'
+
+# # -----------------------------------
+# # 5️⃣ Terraform Apply (AUTO APPROVE ✅)
+# # -----------------------------------
+# - task: TerraformTask@5
+#   displayName: Terraform Apply
+#   inputs:
+#     provider: 'azurerm'
+#     command: 'apply'
+#     workingDirectory: $(tfWorkingDir)
+#     environmentServiceNameAzureRM: 'Maddypipeline'
+#     commandOptions: '-auto-approve'
